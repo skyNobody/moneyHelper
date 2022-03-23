@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value= "AccountStore"></dbname>
+    <version value="2"></version>
+    <list>
+        <mapping class="com.example.apptest.bean.Account"></mapping>
+    </list>
+</litepal>
