@@ -1,11 +1,13 @@
 package com.example.apptest.activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +23,7 @@ import com.example.apptest.adapter.FruitAdapter;
 import com.example.apptest.adapter.MsgAdapter;
 import com.example.apptest.bean.Fruit;
 import com.example.apptest.bean.Msg;
+import com.example.apptest.utils.CalendarReminderUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,7 @@ public class MainActivity extends baseActivity {
         Button send = findViewById(R.id.sendMsg);
         EditText editText = findViewById(R.id.editMsg);
         send.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 String val = editText.getText().toString();
@@ -55,6 +59,7 @@ public class MainActivity extends baseActivity {
                     recyclerView.scrollToPosition(msgList.size() - 1);
                     editText.setText("");
                 }
+                CalendarReminderUtils.addCalendarEvent(MainActivity.this,"学校读书","吃了饭再去",System.currentTimeMillis()+3600*24*1000*2+10000,2);
             }
         });
 
