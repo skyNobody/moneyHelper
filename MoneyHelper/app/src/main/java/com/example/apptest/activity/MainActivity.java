@@ -1,12 +1,17 @@
 package com.example.apptest.activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -48,7 +53,6 @@ public class MainActivity extends baseActivity {
         Button send = findViewById(R.id.sendMsg);
         EditText editText = findViewById(R.id.editMsg);
         send.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 String val = editText.getText().toString();
@@ -59,7 +63,13 @@ public class MainActivity extends baseActivity {
                     recyclerView.scrollToPosition(msgList.size() - 1);
                     editText.setText("");
                 }
-                CalendarReminderUtils.addCalendarEvent(MainActivity.this,"学校读书","吃了饭再去",System.currentTimeMillis()+3600*24*1000*2+10000,2);
+                if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALENDAR)
+                    || PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_CALENDAR)) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, 1);
+                } else {
+                    CalendarReminderUtils.addCalendarEvent(MainActivity.this,"学校读书","吃了饭再去",System.currentTimeMillis()+3600*24*1000*2+10000,2);
+                }
+
             }
         });
 
@@ -73,6 +83,20 @@ public class MainActivity extends baseActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1 :
+                if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    CalendarReminderUtils.addCalendarEvent(MainActivity.this,"学校读书","吃了饭再去",System.currentTimeMillis()+3600*24*1000*2+10000,2);
+                } else {
+                    Toast.makeText(this, "you denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
+
+    }
 
     private void hideActionBar() {
         ActionBar actionBar = getSupportActionBar();

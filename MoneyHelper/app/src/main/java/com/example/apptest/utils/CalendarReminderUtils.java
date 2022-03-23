@@ -30,7 +30,6 @@ public class CalendarReminderUtils {
      * 检查是否已经添加了日历账户，如果没有添加先添加一个日历账户再查询
      * 获取账户成功返回账户id，否则返回-1
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private static int checkAndAddCalendarAccount(Context context) {
         int oldId = checkCalendarAccount(context);
         if (oldId >= 0) {
@@ -103,7 +102,6 @@ public class CalendarReminderUtils {
     /**
      * 添加日历事件
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public static void addCalendarEvent(Context context, String title, String description, long reminderTime, int previousDate) {
         if (context == null) {
             return;
