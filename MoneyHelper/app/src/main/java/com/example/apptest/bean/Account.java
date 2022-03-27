@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Account extends LitePalSupport {
+public class  Account extends LitePalSupport {
     private String account;
 
     private String password;
